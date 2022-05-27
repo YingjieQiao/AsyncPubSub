@@ -1,0 +1,19 @@
+version: '3'
+services:
+  redis:
+    image: redis
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: ./Dockerfile
+    depends_on:
+      - redis
+  producer:
+    build:
+      context: ./producer
+      dockerfile: ./Dockerfile
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
